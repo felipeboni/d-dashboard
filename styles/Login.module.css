@@ -1,0 +1,104 @@
+.container {
+    max-width: 380px;
+    margin: auto;
+}
+
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2.333rem;
+
+    background-color: var(--white);
+
+    border-radius: var(--rounded);
+    border-color: var(--lightblue);
+    border-style: solid;
+    border-width: 1px;
+}
+
+.logo {
+    margin-bottom: 1rem;
+}
+
+
+.logo img {
+    animation: logo-login-slide-up 900ms ease;
+}
+
+@keyframes logo-login-slide-up {
+    0% {
+        transform: translateY(40px) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+.title {
+    font-weight: 500;
+    line-height: 1rem;
+}
+
+.subtitle {
+    font-weight: 400;
+    color: var(--text-light);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.form {
+    display: flex;
+    gap: 1.333rem;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+.inputArea {
+    display: flex;
+    flex-direction: column;
+    gap: 0.275rem;
+}
+
+.inputMultipleArea {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.smallLink {
+    font-size: 0.7rem;
+    font-weight: 300;
+    color: var(--text-light);
+}
+
+.inputLabel {
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+.footer {
+    color: var(--text-light);
+    font-size: 0.875rem;
+}
+
+.footer a {
+    color: var(--primary);
+}
+
+.inputGroup {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.inputGroup button {
+    all: unset;
+    cursor: pointer;
+
+    position: absolute;
+    padding: 0.875rem;
+    box-sizing: border-box;
+    height: 44px;
+    color: var(--text-light);
+}

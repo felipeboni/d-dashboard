@@ -1,9 +1,42 @@
+:root {
+  --bg: #F7F8FC;
+  --white: #fff;
+  --lightblue: #DFE0EB;
+  --text-light: #9FA2B4;
+  --input-light: #FCFDFE;
+
+  --primary: #3751FF;
+
+  --rounded: 0.5rem;
+
+  --border-color: var(--lightblue);
+  --border-width: 2px;
+  --border-style: solid;
+
+  --border: var(--border-color) var(--border-width) var(--border-style);
+
+  --font-family: "Rubik", sans-serif;
+}
+
+::selection {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: var(--font-family);
+  height: 100%;
+  background-color: var(--bg);
+}
+
+body > div {
+  height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 a {
@@ -15,12 +48,45 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+input:is([type="email"], [type="password"], [type="text"]) {
+  border: solid 1px #F0F1F7;
+  background-color: var(--input-light);
+
+  border-radius: var(--rounded);
+  padding: 0.875rem;
+
+  font-family: var(--font-family);
+  color: var(--text-light);
+
+  width: 300px;
+}
+
+button[type="submit"] {
+  font-family: var(--font-family);
+  background-color: var(--primary);
+  border: none;
+  padding: 1rem;
+  border-radius: var(--rounded);
+  color: #fff;
+  font-weight: 400;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+
+button[type="submit"]::after {
+  content: '';
+  background-color: var(--primary);
+  border-radius: var(--rounded);
+
+  width: 100%;
+  height: 100%;
+
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 7px;
+
+  filter: blur(8px);
+  opacity: 0.3;
 }
