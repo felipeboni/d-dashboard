@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useForm, UseFormProps } from 'react-hook-form';
+import { useForm, UseFormProps, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
@@ -10,6 +10,14 @@ interface AddEditProps {
     user?: {
         id: number
     }
+}
+
+type FormProps = {
+    id?: number;
+    firstName: string;
+    lastName: string;
+    username: string;
+    password: string;
 }
 
 export const AddEdit = (props: AddEditProps) => {
@@ -30,27 +38,86 @@ export const AddEdit = (props: AddEditProps) => {
             .min(6, 'Password must be at least 6 characters')
     })
 
-    const formOptions: UseFormProps = { resolver: yupResolver(validationSchema) };
-
-    // Set default form values if in edit modereact nu
-    !isAddMode ? formOptions.defaultValues = props.user : null;
+    const formOptions = {
+        resolver: yupResolver(validationSchema),
+        defaultValues: !isAddMode ? props.user : {}
+    }
 
     // Get function to build form with useForm() hook
-    const { register, handleSubmit, reset, formState } = useForm(formOptions);
+    const { register, handleSubmit, reset, formState } = useForm<FormProps>(formOptions);
     const { errors } = formState;
 
-    function onSubmit(data) {
-        return isAddMode
-            ? createUser(data)
-            : updateUser(user.id, data);
+    const onSubmit: SubmitHandler<FormProps> =
+        data => isAddMode ? createUser(data) : updateUser(user.id, data);
+
+
+    function createUser(data: FormProps) {
+        return userService.register(data)
+            .then(() => {
+                alertService.success('User added', { keepAfterRouteChange: true });
+                router.push('/');
+            })
+            .catch(alertService.error);
     }
 
-    function createUser(data) {
-        return userService.register(data)
-        .then(() => {
-            alertService.success('User Added', { keepAfterRouteChange: true });
-            router.push('/');
-        })
-        .catch(alertService.error);
+    function updateUser(id: number, data: FormProps) {
+        return userService.update(id, data)
+            .then(() => {
+                alertService.success('User updated', { keepAfterRouteChange: true });
+                router.push('..');
+            })
+            .catch(alertService.error)
     }
+
+    return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-row">
+
+                <div className="form-group">
+                    <label htmlFor="firstName">First Name</label>
+                    <input id="firstName" type="text" {...register('firstName')} className={`form-control ${errors.firstName ? 'is-invalid' : ''}`} />
+                    <div className="invalid-feedback">{errors.firstName?.message}</div>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="lastName">Last Name</label>
+                    <input id="lastName" type="text" {...register('lastName')} className={`form-control ${errors.firstName ? 'is-invalid' : ''}`} />
+                    <div className="invalid-feedback">{errors.lastName?.message}</div>
+                </div>
+
+            </div>
+
+            <div className="form-row">
+
+                <div className="form-group">
+                    <label htmlFor="username">Username</label>
+                    <input id="username" type="text" {...register('username')} className={`form-control ${errors.username ? 'is-invalid' : ''}`} />
+                    <div className="invalid-feedback">{errors.firstName?.message}</div>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="password">Password {!isAddMode && <em>(Leave blank to keep the same password)</em>}</label>
+                    <input id="password" type="text" {...register('password')} className={`form-control ${errors.firstName ? 'is-invalid' : ''}`} />
+                    <div className="invalid-feedback">{errors.password?.message}</div>
+                </div>
+
+            </div>
+
+            <div className="form-group">
+                <button type="submit" disabled={ formState.isSubmitting }>
+                     { formState.isSubmitting && <span></span> }
+                    Save
+                </button>
+
+                <button
+                    type="button"
+                    onClick={ () => reset(formOptions.defaultValues) }
+                    disabled={ formState.isSubmitting }>
+                        Reset
+                </button>
+                
+                <Link href="users">Cancel</Link>
+            </div>
+        </form>
+    )
 }

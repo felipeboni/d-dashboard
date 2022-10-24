@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.9.10",
     "@types/yup": "^0.32.0",
     "iron-session": "^6.2.1",
     "next": "12.3.1",
@@ -16,6 +17,7 @@
     "react-dom": "18.2.0",
     "react-feather": "^2.0.10",
     "react-hook-form": "^7.38.0",
+    "react-hot-toast": "^2.4.0",
     "react-icons": "^4.6.0",
     "yup": "^0.32.11"
   },
