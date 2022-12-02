@@ -1,4 +1,5 @@
-import { errorHandler, jwtMiddleware } from 'helpers/api';
+import { errorHandler } from './error-handler';
+import { jwtMiddleware } from './jwt-middleware';
 import { Request, Response } from 'express';
 import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
@@ -17,7 +18,7 @@ export const apiHandler = (handler: { [x: string]: (arg0: Request<ParamsDictiona
 
             // Route handler
             await handler[method](req, res);
-        } catch (err) {
+        } catch (err: any) {
             errorHandler(err, res);
         }
     }

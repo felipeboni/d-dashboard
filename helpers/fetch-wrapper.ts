@@ -4,51 +4,48 @@ import { userService } from 'services';
 
 const { publicRuntimeConfig } = getConfig();
 
-export const fetchWrapper = {
-    get,
-    post,
-    put,
-    delete: _delete
-}
-
-const get = (url: string) => {
-    const requestOptions = {
+const get = async (url: string) => {
+    const requestOptions: RequestInit = {
         method: "GET",
-        headers: authHeader(url)
+        headers: [authHeader(url)]
     };
 
-    return fetch(url, requestOptions).then(handleResponse);
+    const response = await fetch(url, requestOptions);
+    return handleResponse(response);
 }
 
-const post = (url: string, body) => {
-    const requestOptions = {
+const post = async (url: string, body: string) => {
+    const requestOptions: RequestInit = {
         method: "POST",
-        headers: { "Content-Type": "application/json", ...authHeader(url) },
+        headers: [["Content-Type", "application/json"], authHeader(url)],
         credentials: "include",
         body: JSON.stringify(body)
     }
 
-    return fetch(url, requestOptions).then(handleResponse);
+    const response = await fetch(url, requestOptions);
+    return handleResponse(response);
 }
 
-const put = (url: string, body) => {
-    const requestOptions = {
+const put = async (url: string, body: string) => {
+    const requestOptions: RequestInit = {
         method: "PUT",
-        headers: { "Content-Type": "application/json", ...authHeader(url) },
+        headers: [["Content-Type", "application/json"], authHeader(url)],
         body: JSON.stringify(body)
     }
 
-    return fetch(url, requestOptions).then(handleResponse);
+    const response = await fetch(url, requestOptions);
+    return handleResponse(response);
 }
 
 // Prefixed with underscore because delete is a reserved word in JS
-const _delete = (url: string) => {
-    const requestOptions = {
+const _delete = async (url: string) => {
+    const requestOptions: RequestInit = {
         method: "DELETE",
-        headers: authHeader(url)
+        headers: [authHeader(url)]
     }
 
-    return fetch(url, requestOptions).then(handleResponse);
+    const response = await fetch(url, requestOptions);
+    return handleResponse(response);
 }
 
 // Helper function //---------------------------------------------
@@ -60,13 +57,13 @@ const authHeader = (url: string) => {
     const isApiUrl = url.startsWith(publicRuntimeConfig?.apiUrl);
 
     if (isLoggedIn && isApiUrl) {
-        return { Authorization: `Bearer ${user.token}` };
+        return ["Authorization", `Bearer ${user.token}`];
     }
 
-    return {};
+    return [];
 }
 
-const handleResponse = (response) => {
+const handleResponse = (response: Response) => {
     return response.text().then(text => {
         const data = text && JSON.parse(text);
 
@@ -80,4 +77,11 @@ const handleResponse = (response) => {
             return Promise.reject(error);
         }
     })
+}
+
+export const fetchWrapper = {
+    get,
+    post,
+    put,
+    delete: _delete
 }
