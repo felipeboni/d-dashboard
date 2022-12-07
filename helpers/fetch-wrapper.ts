@@ -14,7 +14,7 @@ const get = async (url: string) => {
     return handleResponse(response);
 }
 
-const post = async (url: string, body: string) => {
+const post = async (url: string, body: object) => {
     const requestOptions: RequestInit = {
         method: "POST",
         headers: [["Content-Type", "application/json"], authHeader(url)],
@@ -26,7 +26,7 @@ const post = async (url: string, body: string) => {
     return handleResponse(response);
 }
 
-const put = async (url: string, body: string) => {
+const put = async (url: string, body: object) => {
     const requestOptions: RequestInit = {
         method: "PUT",
         headers: [["Content-Type", "application/json"], authHeader(url)],

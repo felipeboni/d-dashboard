@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useForm, UseFormProps, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
@@ -12,7 +12,7 @@ interface AddEditProps {
     }
 }
 
-type FormProps = {
+export interface UserProps {
     id?: number;
     firstName: string;
     lastName: string;
@@ -44,14 +44,14 @@ export const AddEdit = (props: AddEditProps) => {
     }
 
     // Get function to build form with useForm() hook
-    const { register, handleSubmit, reset, formState } = useForm<FormProps>(formOptions);
+    const { register, handleSubmit, reset, formState } = useForm<UserProps>(formOptions);
     const { errors } = formState;
 
-    const onSubmit: SubmitHandler<FormProps> =
+    const onSubmit: SubmitHandler<UserProps> =
         data => isAddMode ? createUser(data) : updateUser(user.id, data);
 
 
-    function createUser(data: FormProps) {
+    function createUser(data: UserProps) {
         return userService.register(data)
             .then(() => {
                 alertService.success('User added', { keepAfterRouteChange: true });
@@ -60,7 +60,7 @@ export const AddEdit = (props: AddEditProps) => {
             .catch(alertService.error);
     }
 
-    function updateUser(id: number, data: FormProps) {
+    function updateUser(id: string, data: UserProps) {
         return userService.update(id, data)
             .then(() => {
                 alertService.success('User updated', { keepAfterRouteChange: true });

@@ -47,7 +47,7 @@ export const Login = () => {
                         </div>
 
                         <div className="form-group">
-                            <label>Username</label>
+                            <label>Password</label>
                             <input type="password" {...register('password')} className={`form-control ${errors.password ? 'is-invalid' : ''}`} />
                             <div className="invalid-feedback">{ String(errors.password?.message) }</div>
                         </div>
