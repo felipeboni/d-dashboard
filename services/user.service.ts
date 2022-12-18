@@ -6,7 +6,8 @@ import { fetchWrapper } from 'helpers';
 
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig}/users`;
-const userSubject = new BehaviorSubject(typeof window && JSON.parse(localStorage.getItem('user') || ""));
+
+const userSubject = new BehaviorSubject(process.browser && JSON.parse(localStorage.getItem('user') || '{}'));
 
 const login = (username: string, password: string) => {
     return fetchWrapper.post(`${baseUrl}/authenticate`, { username, password })
